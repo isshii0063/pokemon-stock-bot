@@ -1,9 +1,9 @@
 name: Pokemon Stock Checker
 
 on:
-  schedule:
-    - cron: "* * * * *"
   workflow_dispatch:
+  schedule:
+    - cron: '*/2 * * * *'
 
 jobs:
   check:
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install requests
         run: pip install requests
