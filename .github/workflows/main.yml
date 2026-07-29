@@ -1,10 +1,12 @@
-name: Test
+name: Pokemon Stock Checker
 
 on:
+  schedule:
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,12 +15,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install requests
         run: pip install requests
 
-      - name: Run bot
+      - name: Run checker
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: python check_stock.py
