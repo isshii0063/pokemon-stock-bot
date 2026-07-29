@@ -1,9 +1,12 @@
 name: Pokemon Stock Checker
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
-  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   check:
