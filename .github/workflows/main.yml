@@ -1,4 +1,4 @@
-name:Pokemon Stock Checker Auto
+name: Pokemon Stock Checker Auto
 
 on:
   workflow_dispatch:
