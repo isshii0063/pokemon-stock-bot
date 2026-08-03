@@ -1,33 +1,22 @@
-import requests
-import os
+def check_stock(name, url):
+    print(f"===== {name} =====")
 
-PRODUCTS = {
-    "インフェルノX": "https://aeonretail.com/product/0/P-2135500001757/",
-    "メガドリーム": "https://aeonretail.com/product/0/P-2135500002662/",
-    "スタートデッキ100": "https://aeonretail.com/product/0/P-4521329427270/"
-}
+    r = requests.get(url, timeout=15)
 
-webhook = os.environ["DISCORD_WEBHOOK"]
+    print(f"HTTP: {r.status_code}")
 
-headers = {
-    "User-Agent": "Mozilla/5.0"
-}
+    html = r.text
 
-results = []
+    # イオンの在庫あり判定
+    stock_words = [
+        "カートに入れる",
+        "購入する",
+    ]
 
-for name, url in PRODUCTS.items():
-    try:
-        r = requests.get(url, headers=headers, timeout=15)
-        text = r.text
+    for w in stock_words:
+        if w in html:
+            print(f"→ 在庫あり判定 ({w})")
+            return True
 
-        if "カートに入れる" in text or "購入する" in text:
-            results.append(f"🟢 {name}: 在庫あり！ {url}")
-
-    except Exception as e:
-        print(f"{name}: エラー {e}")
-
-# 在庫ありの商品がある時だけ通知
-if results:
-    requests.post(webhook, json={
-        "content": "🚨 イオン在庫復活！\\n\\n" + "\\n".join(results)
-    })
+    print("→ 在庫なし判定")
+    return False
