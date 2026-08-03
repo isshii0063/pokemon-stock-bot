@@ -9,8 +9,12 @@ PRODUCTS = {
     "スタートデッキGenerations": "https://aeonretail.com/product/0/P-4521329364668/",
 }
 
+# ブラウザっぽく見せる
 HEADERS = {
-    "User-Agent": "Mozilla/5.0"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+    "Referer": "https://www.google.com/",
 }
 
 
@@ -20,6 +24,12 @@ def check_stock(name, url):
     r = requests.get(url, headers=HEADERS, timeout=15)
 
     print(f"HTTP: {r.status_code}")
+
+    # 403対策確認
+    if r.status_code != 200:
+        print("⚠️ アクセス拒否の可能性あり")
+        print(r.text[:200])
+        return False
 
     html = r.text
 
@@ -45,7 +55,6 @@ def send_discord(message):
     )
 
 
-# ===== 実行部分 =====
 for name, url in PRODUCTS.items():
     try:
         if check_stock(name, url):
